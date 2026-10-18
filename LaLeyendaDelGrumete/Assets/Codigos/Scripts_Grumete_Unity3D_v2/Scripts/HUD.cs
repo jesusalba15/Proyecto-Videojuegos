@@ -62,6 +62,11 @@ public class HUD : MonoBehaviour
     [Header("Musica (opcional, suena en bucle en esta escena)")]
     public AudioClip musica;
     [Range(0f, 1f)] public float volumenMusica = 0.6f;
+    AudioSource fuenteMusicaEscena;
+    Image vineta;
+    static float herida;
+    // pantalla roja en los bordes cuando Kai recibe dano (fuerza 0 a 1)
+    public static void Herida(float fuerza) { herida = Mathf.Clamp01(Mathf.Max(herida, fuerza)); }
 
     [Header("Menu principal")]
     [TextArea(6, 12)] public string[] creditos =
@@ -84,6 +89,7 @@ public class HUD : MonoBehaviour
     RectTransform cajaPausa;
     RectTransform[] filasTarea = new RectTransform[5]; Image[] marcasTarea = new Image[5]; Text[] textosTarea = new Text[5];
     Text textoSigilo;
+    GameObject cajaReloj; Image iconoReloj; Text textoReloj;
     GameObject cajaInvocar; Image invIcono, invReloj, invActivo; Text invLetra, invNombre, invSeg;
     CanvasGroup grupoObjetivo; float objetivoCambio = -100f, altoObjetivo = 150f; string objetivoAnterior; bool objetivoAbierto; Text tituloObjetivo;
     System.Action menuVolver; GameObject[] menuPaneles;   // menu principal: Esc tambien vuelve atras
@@ -150,6 +156,7 @@ public class HUD : MonoBehaviour
             var fuenteAudio = gameObject.AddComponent<AudioSource>();
             fuenteAudio.clip = musica; fuenteAudio.loop = true; fuenteAudio.volume = volumenMusica;
             fuenteAudio.spatialBlend = 0f; fuenteAudio.Play();
+            fuenteMusicaEscena = fuenteAudio;
         }
     }
 
@@ -196,8 +203,23 @@ public class HUD : MonoBehaviour
         }
         ActualizarMundo();
         Refrescar();
+        RefrescarVineta();
         if (tituloMenu)   // el titulo "respira" suavemente
             tituloMenu.rectTransform.localScale = Vector3.one * (1f + Mathf.Sin(Time.unscaledTime * 1.4f) * 0.015f);
+    }
+
+    void RefrescarVineta()
+    {
+        if (fuenteMusicaEscena)   // la musica de la escena se calla mientras suena la del jefe
+            fuenteMusicaEscena.volume = Mathf.MoveTowards(fuenteMusicaEscena.volume, Sonidos.HayMusica ? 0f : volumenMusica, Time.unscaledDeltaTime * 0.5f);
+        if (!vineta) return;
+        herida = Mathf.MoveTowards(herida, 0f, Time.unscaledDeltaTime * 1.6f);
+        // con poca vida late suave
+        bool poca = kai && !kai.EstaMuerto && GameState.VidaKai > 0 && GameState.VidaKai < Progreso.VidaMax * 0.25f && escena != "Menu";
+        float baja = poca ? 0.16f + 0.08f * Mathf.Sin(Time.unscaledTime * 4.5f) : 0f;
+        float a = Pausado ? 0f : Mathf.Max(herida * 0.55f, baja);
+        vineta.enabled = a > 0.005f;
+        if (vineta.enabled) vineta.color = new Color(0.75f, 0.05f, 0.04f, a);
     }
 
     // ================================================================ pausa y escenas
@@ -360,6 +382,14 @@ public class HUD : MonoBehaviour
 
         RefrescarHabilidades();
         RefrescarInvocacion();
+        // reloj: sol dorado de dia, luna azulada de noche
+        bool hayCiclo = CicloDia.Actual && EsIsla;
+        if (cajaReloj.activeSelf != hayCiclo) cajaReloj.SetActive(hayCiclo);
+        if (hayCiclo)
+        {
+            textoReloj.text = CicloDia.TextoHora();
+            iconoReloj.color = Color.Lerp(new Color(0.75f, 0.82f, 1f), dorado, CicloDia.Luz);
+        }
         textoMadera.text = Equipo.Madera.ToString();
         textoChatarra.text = Equipo.Chatarra.ToString();
 
@@ -406,8 +436,8 @@ public class HUD : MonoBehaviour
         if (escena == "Navegacion") return "Navega hasta <b>" + (Archipielago.Buscar(GameState.IslaDestino)?.nombre ?? "tu destino") + "</b>.\n<size=20>W avanzar · S frenar · A/D timón · M mapa</size>";
         // islas con objetivo propio (ZonaIsla > Objetivo)
         var zonaObj = ZonaIsla.De(GameState.IslaActual);
-        if (zonaObj && !string.IsNullOrEmpty(zonaObj.objetivo) && !(BarcoController.Actual && BarcoController.Actual.Manejando))
-            return zonaObj.Completada ? "¡Isla completada! Abre el mapa (<b>M</b>) y traza la ruta a la siguiente isla." : zonaObj.objetivo;
+        if (zonaObj && zonaObj.TieneObjetivo && !(BarcoController.Actual && BarcoController.Actual.Manejando))
+            return zonaObj.Completada ? "¡Isla completada! Abre el mapa (<b>M</b>) y traza la ruta a la siguiente isla." : zonaObj.TextoObjetivo();
         var bc = BarcoController.Actual;
         string destino = Archipielago.Buscar(GameState.IslaDestino)?.nombre ?? "tu destino";
         if (bc && bc.Manejando)
@@ -483,6 +513,12 @@ public class HUD : MonoBehaviour
         if (barco && barco.PuedeSubir(pos)) return "Subir al barco";
         foreach (var rc2 in RecompensaIsla.Todas)
             if (rc2 && rc2.PideHablar && rc2.Cerca(pos)) return string.IsNullOrEmpty(rc2.hablante) ? "Examinar" : "Hablar con " + rc2.hablante;
+        foreach (var en in Encargo.Todos)
+            if (en && en.Cerca(pos)) return en.Prompt();
+        foreach (var om in ObjetoMision.Todos)
+            if (om && om.Cerca(pos)) return "F:Recoger " + om.nombre;
+        foreach (var bq in Bloqueo.Todos)
+            if (bq && bq.Cerca(pos)) return bq.Prompt();
         foreach (var ta in Taller.Todos)
             if (ta && ta.Cerca(pos)) return "Abrir el taller";
         foreach (var ar in ArmaEnSuelo.Todos)
@@ -662,6 +698,13 @@ public class HUD : MonoBehaviour
         var sn = invNombre.GetComponent<Shadow>(); sn.effectColor = new Color(0, 0, 0, 0.9f); sn.effectDistance = new Vector2(1.5f, -1.5f);
         cajaInvocar.SetActive(false);
 
+        // ---------- Vineta roja (dano y vida baja), detras de todo el HUD
+        vineta = Img(raiz, "Herida", Adornos.Vineta(), new Color(0.75f, 0.05f, 0.04f, 0f), new Vector2(0.5f, 0.5f), Vector2.zero, Vector2.zero);
+        Estirar(vineta.rectTransform, 0);
+        vineta.raycastTarget = false; vineta.enabled = false;
+        vineta.transform.SetSiblingIndex(0);
+        herida = 0f;
+
         // ---------- Capa de numeros de dano
         capaNumeros = new GameObject("Numeros", typeof(RectTransform)).GetComponent<RectTransform>();
         capaNumeros.SetParent(raiz, false); Estirar(capaNumeros, 0);
@@ -689,6 +732,14 @@ public class HUD : MonoBehaviour
             filasTarea[i] = fr;
         }
         textoObjetivo.supportRichText = true;
+
+        // ---------- Reloj del dia (debajo del minimapa; solo si hay CicloDia en la escena)
+        var rel = Img(grupoExploracion.transform, "Reloj", cuadro, Color.white, new Vector2(1, 1), new Vector2(-225, -306), new Vector2(120, 32));
+        Adornos.Decorar(rel, new Color(0.14f, 0.08f, 0.04f, 0.9f), Adornos.Oro, false);
+        cajaReloj = rel.gameObject;
+        iconoReloj = Img(rel.transform, "SolLuna", Adornos.Perilla(), dorado, new Vector2(0, 0.5f), new Vector2(10, 11), new Vector2(22, 22));
+        textoReloj = Etiqueta(rel.transform, "", 18, FontStyle.Bold, new Color(1f, 0.93f, 0.75f), new Vector2(38, 0), new Vector2(76, 32), TextAnchor.MiddleLeft);
+        cajaReloj.SetActive(false);
 
         // ---------- Mapa vivo en miniatura + tripulacion (arriba a la derecha)
         grupoMiniMapa = Grupo("MiniMapa");

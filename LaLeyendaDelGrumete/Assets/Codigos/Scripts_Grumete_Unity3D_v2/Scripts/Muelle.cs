@@ -20,6 +20,11 @@ public class Muelle : MonoBehaviour
     [Tooltip("Fragmentos de mapa necesarios para que aparezca el barco (1 = al terminar las pruebas de Barbagris)")]
     public int fragmentosParaBarco = 1;
 
+    [Header("Punto de guardado")]
+    [Tooltip("Al llegar Kai a pie a este muelle se guarda la partida, y si cae en esta isla revive aqui")]
+    public bool guardarAlLlegar = true;
+    bool guardadoAqui;
+
     public static Muelle[] Todos = new Muelle[0];
     public Transform PuntoLlegada => puntoLlegada ? puntoLlegada : transform;
     public bool BarcoListo => barco && GameState.Fragmentos >= fragmentosParaBarco;
@@ -51,6 +56,7 @@ public class Muelle : MonoBehaviour
 
     void Update()
     {
+        PuntoDeGuardado();
         if (!barco || aparecio || !BarcoListo) return;
         aparecio = true;
         Amarrar();
@@ -59,6 +65,26 @@ public class Muelle : MonoBehaviour
     }
 
     public bool Cerca(Vector3 p) => Vector3.Distance(p, transform.position) < radio;
+
+    // Kai llega al muelle a pie: se guarda la partida en esta isla (vuelve a guardar si se va y regresa)
+    void PuntoDeGuardado()
+    {
+        if (!guardarAlLlegar || !GameState.Kai) return;
+        if (BarcoController.Actual && BarcoController.Actual.Manejando) return;   // en el barco no cuenta
+        float d = Vector3.Distance(GameState.Kai.position, PuntoLlegada.position);
+        float dMuelle = Vector3.Distance(GameState.Kai.position, transform.position);
+        bool cerca = Mathf.Min(d, dMuelle) < Mathf.Max(radio, 4f);
+        if (cerca && !guardadoAqui)
+        {
+            guardadoAqui = true;
+            GameState.IslaActual = idIsla;
+            GameState.Guardar(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+            var isla = Archipielago.Buscar(idIsla);
+            GameState.Avisar("Progreso guardado: muelle de " + (isla != null ? isla.nombre : "la isla"), 2f);
+            Efectos.Anillo(PuntoLlegada.position, 2f, new Color(0.45f, 0.85f, 1f), 0.6f);
+        }
+        else if (!cerca && Mathf.Min(d, dMuelle) > Mathf.Max(radio, 4f) * 3f) guardadoAqui = false;
+    }
 
     // Texto del aviso cuando Kai esta cerca ("" = no mostrar nada)
     public string Prompt()

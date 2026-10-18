@@ -51,7 +51,12 @@ public class Cofre : MonoBehaviour
     IEnumerator Abrir(bool animado)
     {
         abierto = true;
-        if (animado && GameState.TieneMara == 0) Progreso.Ganar(Progreso.XpCofre);
+        if (animado && GameState.TieneMara == 0)
+        {
+            Sonidos.Tocar("cofre", transform.position, 1f, 0f);
+            Efectos.Columna(transform.position + Vector3.up * 0.5f, new Color(1f, 0.85f, 0.35f), 20, 1.1f);
+            Progreso.Ganar(Progreso.XpCofre);
+        }
         GameState.TieneMara = 1;
         var marca = GetComponent<MarcadorMinimapa>(); if (marca) marca.Activo = false;
         float d = animado ? duracion : 0f;

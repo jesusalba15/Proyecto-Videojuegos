@@ -24,6 +24,8 @@ public class RecompensaIsla : MonoBehaviour
     public Equipo.IdArma arma = Equipo.IdArma.Punos;   // Punos = ninguna
     public int experiencia = 150;
     public int doblones = 0;
+    [Tooltip("Niveles de vela del barco que regala (Pico: 1)")]
+    public int mejoraVela = 0;
 
     [Header("Dialogo")]
     public string hablante = "";
@@ -78,8 +80,13 @@ public class RecompensaIsla : MonoBehaviour
             GameState.Fragmentos += fragmentos;
             if (GameState.Kai) HUD.Numero(GameState.Kai.position + Vector3.up * 2.2f, "+" + fragmentos + " fragmento de mapa", new Color(0.95f, 0.8f, 0.4f), 1.1f);
         }
-        if (doblones > 0) { Equipo.Doblones += doblones; if (GameState.Kai) HUD.Numero(GameState.Kai.position + Vector3.up * 1.8f, "+" + doblones + " doblones", new Color(1f, 0.82f, 0.3f), 0.9f); }
+        if (doblones > 0) { Sonidos.Tocar("monedas", null, 0.9f); Equipo.Doblones += doblones; if (GameState.Kai) HUD.Numero(GameState.Kai.position + Vector3.up * 1.8f, "+" + doblones + " doblones", new Color(1f, 0.82f, 0.3f), 0.9f); }
         if (arma != Equipo.IdArma.Punos) Equipo.Desbloquear(arma);
+        if (mejoraVela > 0 && Mejoras.NivelVela < Mejoras.MaxVela)
+        {
+            Mejoras.NivelVela = Mathf.Min(Mejoras.MaxVela, Mejoras.NivelVela + mejoraVela);
+            if (GameState.Kai) HUD.Numero(GameState.Kai.position + Vector3.up * 3f, "Vela del barco +" + Mejoras.NivelVela, new Color(0.6f, 0.85f, 1f), 1f);
+        }
         Tripulacion.Reclutar(tripulante);
         Progreso.Ganar(experiencia);
         foreach (var g in activar) if (g) g.SetActive(true);

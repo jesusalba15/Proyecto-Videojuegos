@@ -3,7 +3,8 @@ using UnityEngine;
 // Tripulacion de Kai: cada tripulante se recluta en una isla y se INVOCA con G (H cambia de tripulante),
 // como los Elegidos de Zelda BotW. Su bonus solo funciona mientras esta invocado (ver Invocacion.cs):
 //   Mara "Nudos"  (Faro Roto)          -> barco +50% y Kai +15% a pie
-//   Pico          (Astillero Hundido)  -> el Taller cobra 25% menos
+//   Pico          (Astillero Hundido)  -> el Taller cobra 25% menos (y al unirse regala una vela nueva;
+//                                         sin el, el barco no llega a las islas lejanas 4 y 5)
 //   Sombra        (Bahia de la Corona) -> los guardias tardan mucho mas en verte
 //   Bruno         (Fuerte de Roca)     -> recibes la mitad del dano
 // Se recluta con un RecompensaIsla (campo "Tripulante") o con el Cofre de Mara.

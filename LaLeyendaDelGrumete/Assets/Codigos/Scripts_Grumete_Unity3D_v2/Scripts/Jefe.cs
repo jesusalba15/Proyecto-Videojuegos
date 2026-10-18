@@ -51,6 +51,12 @@ public class Jefe : MonoBehaviour
     [Tooltip("Enemigos de la escena (desactivados) que aparecen al entrar en fase 2")]
     public GameObject[] secuaces;
 
+    [Header("Musica")]
+    [Tooltip("Nombre del sonido en Resources/Sonidos que suena durante la pelea (vacio = sin musica)")]
+    public string musicaPelea = "musica_jefe";
+    [Tooltip("En la fase 2 la musica va un poco mas rapida")]
+    public float tonoFase2 = 1.08f;
+
     [Header("Al morir")]
     public UnityEngine.Events.UnityEvent alMorir;
 
@@ -62,7 +68,7 @@ public class Jefe : MonoBehaviour
     PlayerController kai;
     AnimacionSimple anim;
     float proximoEspecial, velBase, esperaBase;
-    bool presentado, terminado, enEspecial;
+    bool presentado, terminado, enEspecial, conMusica;
     static readonly Color Rojo = new Color(1f, 0.15f, 0.1f);
 
     // un jefe nunca es el rival del duelo (si lo duplicaste de Tomas, esto evita que desaparezca)
@@ -79,7 +85,16 @@ public class Jefe : MonoBehaviour
         foreach (var s in secuaces) if (s) s.SetActive(false);
     }
 
-    void OnDisable() { if (Actual == this) Actual = null; }
+    void OnDisable() { if (Actual == this) Actual = null; Musica(false); }
+
+    // prende o apaga la musica de pelea solo cuando cambia (asi varios jefes en la escena no se pisan)
+    void Musica(bool si)
+    {
+        if (string.IsNullOrEmpty(musicaPelea) || si == conMusica) return;
+        conMusica = si;
+        Sonidos.Musica(si ? musicaPelea : null);
+        Sonidos.TonoMusica = 1f;
+    }
 
     void Update()
     {
@@ -94,16 +109,18 @@ public class Jefe : MonoBehaviour
             if (Fase == 2) VolverFase1();
             presentado = false;
             if (Actual == this) Actual = null;   // Kai cayo: la barra del jefe se quita (como en Dark Souls)
+            Musica(false);
             return;
         }
 
         // una vez empezada la pelea la barra queda fija, aunque Kai salga un momento de la zona
-        if (presentado && Plano(kai.transform.position - transform.position).magnitude > 60f) { presentado = false; if (Actual == this) Actual = null; }
+        if (presentado && Plano(kai.transform.position - transform.position).magnitude > 60f) { presentado = false; if (Actual == this) Actual = null; Musica(false); }
         if (Rival.EnCombate != r) return;
         Actual = this;
         if (!presentado)
         {
             presentado = true;
+            Musica(true);
             GameState.Hablar(r.nombre, fraseInicio, 3.5f);
             proximoEspecial = Time.time + 3.5f;
         }
@@ -115,6 +132,7 @@ public class Jefe : MonoBehaviour
     void EntrarFase2()
     {
         Fase = 2;
+        if (conMusica) Sonidos.TonoMusica = tonoFase2;
         r.velocidad = velBase * multVelocidad;
         r.esperaEntreAtaques = esperaBase * 0.7f;
         Colorear.Poner(gameObject, new Color(1f, 0.55f, 0.5f));
@@ -140,6 +158,8 @@ public class Jefe : MonoBehaviour
         StopAllCoroutines(); r.Ocupado = false; r.giroBloqueado = false;
         Colorear.Restaurar(gameObject);
         GameState.Hablar(r.nombre, fraseDerrota, 3f);
+        if (conMusica) Sonidos.Tocar("victoria", null, 1f, 0f, 1f);
+        Musica(false);
         Efectos.Anillo(transform.position, 6f, new Color(1f, 0.85f, 0.3f), 1f);
         Efectos.Sacudir(0.35f, 0.6f);
         alMorir?.Invoke();

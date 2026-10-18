@@ -162,6 +162,7 @@ public class Taller : MonoBehaviour
     void Exito(string que)
     {
         GameState.Avisar("¡Listo! " + que, 1.5f);
+        Sonidos.Tocar("monedas", null, 0.8f);
         Refrescar();
     }
 

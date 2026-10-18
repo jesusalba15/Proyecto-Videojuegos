@@ -43,6 +43,9 @@ public static class Progreso
                 HUD.Numero(p + Vector3.up * 0.5f, "¡NIVEL " + Nivel + "!", new Color(1f, 0.85f, 0.3f), 1.6f);
                 Efectos.Anillo(GameState.Kai.position, 2.5f, new Color(1f, 0.85f, 0.3f), 0.7f);
                 Efectos.Anillo(GameState.Kai.position, 1.4f, new Color(0.72f, 0.58f, 1f), 0.5f);
+                Efectos.Columna(GameState.Kai.position, new Color(1f, 0.85f, 0.3f), 26, 1.4f);
+                Efectos.Destello(GameState.Kai.position + Vector3.up * 1.5f, new Color(1f, 0.85f, 0.4f), 3f, 6f, 0.5f);
+                Sonidos.Tocar("nivel", null, 0.9f, 0f, 0.5f);
             }
             string extra = "";
             for (int i = 0; i < Equipo.NivelHabilidad.Length; i++)

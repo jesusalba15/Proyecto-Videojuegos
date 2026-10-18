@@ -7,6 +7,7 @@ public class LuzVela : MonoBehaviour
     public float variacion = 0.6f;
     public float velocidad = 7f;
     public float temblor = 0.015f;   // la llama se mueve un poquito
+    [HideInInspector] public float factor = 1f;   // lo usa Farol para prenderla de noche
 
     Light luz;
     Vector3 posBase;
@@ -25,7 +26,8 @@ public class LuzVela : MonoBehaviour
         if (!luz) return;
         float t = Time.time * velocidad + semilla;
         float ruido = Mathf.PerlinNoise(t, semilla) - 0.5f;
-        luz.intensity = intensidadBase + ruido * 2f * variacion;
+        luz.intensity = (intensidadBase + ruido * 2f * variacion) * factor;
+        luz.enabled = factor > 0.01f;
         luz.transform.localPosition = posBase + new Vector3(Mathf.PerlinNoise(semilla, t) - 0.5f, 0f, Mathf.PerlinNoise(t, t) - 0.5f) * temblor * 2f;
     }
 }

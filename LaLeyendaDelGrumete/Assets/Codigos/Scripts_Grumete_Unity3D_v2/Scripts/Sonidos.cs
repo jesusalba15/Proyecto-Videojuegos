@@ -10,18 +10,31 @@ using UnityEngine;
 //   bloqueo         -> Kai bloquea un golpe
 //   kai_dolor       -> Kai recibe dano
 //   enemigo_dolor   -> un enemigo recibe dano
+//   enemigo_cae     -> un enemigo muere y cae
+//   paso            -> pisadas de Kai (paso, paso_2, paso_3, paso_4)
+//   aterrizaje      -> Kai cae de un salto alto
+//   monedas         -> recoger o gastar doblones
+//   recoger         -> recoger madera, chatarra, cocos o un arma
+//   cofre           -> abrir un cofre
+//   nivel           -> subir de nivel
+//   musica_jefe     -> musica de pelea con jefe (en bucle)
+//   victoria        -> fanfarria al derrotar un jefe
 // Para cambiar un sonido por uno mejor, reemplaza el archivo con el mismo nombre (wav, mp3 u ogg).
 // El volumen general es el de Opciones.
 public class Sonidos : MonoBehaviour
 {
     public static float VolumenAmbiente = 0.45f;
     public static float VolumenEfectos = 0.9f;
+    public static float VolumenMusica = 0.55f;
+    public static float TonoMusica = 1f;   // la fase 2 de un jefe la acelera un poco
 
     static Sonidos instancia;
     readonly Dictionary<string, AudioClip[]> clips = new Dictionary<string, AudioClip[]>();
     readonly Dictionary<string, float> ultimaVez = new Dictionary<string, float>();
     AudioSource[] fuentes;
-    AudioSource ambiente;
+    AudioSource ambiente, musica;
+    string musicaPedida;          // la que debe sonar (null = ninguna)
+    AudioClip clipMusica;
     int siguiente;
 
     static Sonidos I
@@ -87,11 +100,45 @@ public class Sonidos : MonoBehaviour
         s.ambiente.clip = clip; s.ambiente.volume = 0f; s.ambiente.Play();
     }
 
+    // Musica en bucle con fundido: Sonidos.Musica("musica_jefe") la empieza, Sonidos.Musica(null) la apaga.
+    // Mientras suena, el sonido ambiente baja un poco.
+    public static void Musica(string nombre)
+    {
+        var s = I;
+        if (s.musicaPedida == nombre) return;
+        s.musicaPedida = nombre;
+        s.clipMusica = nombre == null ? null : s.Clip(nombre);
+        if (!s.musica) { s.musica = s.gameObject.AddComponent<AudioSource>(); s.musica.loop = true; s.musica.spatialBlend = 0f; s.musica.playOnAwake = false; s.musica.volume = 0f; }
+    }
+
+    public static bool HayMusica => instancia && instancia.musicaPedida != null;
+    public static bool SuenaMusica => instancia && instancia.musica && instancia.musica.isPlaying;
+
     void Update()
     {
-        // el ambiente sube suave al empezar
+        float dt = Time.unscaledDeltaTime;
+        // musica: si cambia, primero baja la que suena y luego entra la nueva
+        if (musica)
+        {
+            AudioClip quiero = clipMusica;
+            if (musica.clip != quiero && musica.isPlaying)
+            {
+                musica.volume = Mathf.MoveTowards(musica.volume, 0f, dt * 0.8f);
+                if (musica.volume <= 0f) musica.Stop();
+            }
+            else if (quiero)
+            {
+                if (!musica.isPlaying) { musica.clip = quiero; musica.volume = 0f; musica.pitch = 1f; musica.Play(); }
+                musica.volume = Mathf.MoveTowards(musica.volume, VolumenMusica, dt * 0.6f);
+                musica.pitch = Mathf.MoveTowards(musica.pitch, TonoMusica, dt * 0.2f);
+            }
+        }
+        // el ambiente sube suave al empezar (y baja a la mitad cuando hay musica)
         if (ambiente && ambiente.isPlaying)
-            ambiente.volume = Mathf.MoveTowards(ambiente.volume, VolumenAmbiente, Time.unscaledDeltaTime * 0.3f);
+        {
+            float meta = SuenaMusica && musicaPedida != null ? VolumenAmbiente * 0.45f : VolumenAmbiente;
+            ambiente.volume = Mathf.MoveTowards(ambiente.volume, meta, dt * 0.3f);
+        }
     }
 
     AudioClip Clip(string nombre)

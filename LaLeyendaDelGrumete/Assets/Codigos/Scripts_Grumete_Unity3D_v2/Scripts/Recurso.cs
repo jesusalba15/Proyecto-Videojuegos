@@ -82,6 +82,7 @@ public class Recurso : MonoBehaviour
                 HUD.Numero(p, "+" + n + " agua de coco", new Color(0.55f, 0.9f, 0.4f), 0.9f);
                 break;
         }
+        Sonidos.Tocar("recoger", transform.position, 0.6f, 0.12f);
         global::Progreso.Ganar(global::Progreso.XpRecurso);   // "Progreso" a secas es la barra de recoleccion
         restantes--;
         if (Agotado) { Mostrar(false); vuelveEn = Time.time + reaparece; Recolectando = null; }

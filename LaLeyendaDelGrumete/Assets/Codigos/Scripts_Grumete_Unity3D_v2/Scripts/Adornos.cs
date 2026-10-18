@@ -313,6 +313,23 @@ public static class Adornos
     }
 
     // degradado vertical: luz blanca arriba, transparente al medio y sombra abajo (para barras)
+    // vineta: transparente al centro y opaca en los bordes (pantalla roja al recibir dano)
+    static Sprite vineta;
+    public static Sprite Vineta()
+    {
+        if (vineta) return vineta;
+        int n = 64; var px = new Color[n * n]; float r = n * 0.5f;
+        for (int y = 0; y < n; y++)
+            for (int x = 0; x < n; x++)
+            {
+                float d = new Vector2((x + 0.5f - r) / r, (y + 0.5f - r) / r).magnitude;   // 0 centro, 1 borde
+                float a = Mathf.Clamp01((d - 0.55f) / 0.6f); a = a * a * (3f - 2f * a);
+                px[y * n + x] = new Color(1, 1, 1, a);
+            }
+        var t = new Texture2D(n, n, TextureFormat.RGBA32, false); t.wrapMode = TextureWrapMode.Clamp; t.SetPixels(px); t.Apply();
+        return vineta = Sprite.Create(t, new Rect(0, 0, n, n), new Vector2(.5f, .5f));
+    }
+
     static Sprite brillo;
     public static Sprite Brillo()
     {

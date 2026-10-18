@@ -13,6 +13,7 @@ public static class Archipielago
         public int fragmentos;             // fragmentos de mapa para que la tinta la revele
         public int agi, com, sig, nav;     // destrezas necesarias para zarpar hacia ella
         public int nivel;                  // nivel de Kai necesario (0 = cualquiera)
+        public Tripulacion.Miembro tripulante = Tripulacion.Miembro.Ninguno;   // tripulante necesario (Pico: sin el no se llega a islas lejanas)
         public int origen;                 // isla desde la que sale su ruta (0 = ninguna)
         public Vector2 posicion;           // posicion en el mapa del mundo (0 a 1)
         public bool disponible;            // true = forzar disponible. Si no, se activa sola cuando hay una ZonaIsla con su id en la escena
@@ -30,6 +31,7 @@ public static class Archipielago
             if (GameState.Combate < com) f += "Combate " + com + "  ";
             if (GameState.Sigilo < sig) f += "Sigilo " + sig + "  ";
             if (GameState.Navegacion < nav) f += "Navegación " + nav + "  ";
+            if (tripulante != Tripulacion.Miembro.Ninguno && !Tripulacion.Tiene(tripulante)) f += "Tripulante " + Tripulacion.Nombres[(int)tripulante] + "  ";
             return f.Trim();
         }
         public bool Cumple => Falta() == "";
@@ -45,14 +47,14 @@ public static class Archipielago
                    descripcion = "Un viejo faro apagado. Dicen que alguien espera atrapada en un cofre.", recompensa = "Tripulante: Mara \"Nudos\"" },
         new Isla { id = 3, nombre = "Astillero Hundido", tipo = Tipo.Libre, peligro = 2, fragmentos = 2, com = 1, nivel = 3, origen = 2,
                    posicion = new Vector2(0.52f, 0.38f), disponible = false,
-                   descripcion = "Cascos podridos y un carpintero gruñón entre la madera.", recompensa = "Tripulante: Pico · mejora del barco" },
-        new Isla { id = 4, nombre = "Bahía de la Corona", tipo = Tipo.Corona, peligro = 3, fragmentos = 3, sig = 1, nav = 1, nivel = 5, origen = 3,
+                   descripcion = "Cascos podridos y un carpintero gruñón entre la madera.", recompensa = "Tripulante: Pico · vela nueva · pistola" },
+        new Isla { id = 4, nombre = "Bahía de la Corona", tipo = Tipo.Corona, peligro = 3, fragmentos = 3, sig = 1, nav = 1, nivel = 5, origen = 3, tripulante = Tripulacion.Miembro.Pico,
                    posicion = new Vector2(0.66f, 0.72f), disponible = false,
                    descripcion = "Puerto de la Armada. De noche los Cazadores patrullan con faroles.", recompensa = "Tripulante: Sombra · ganzúa" },
-        new Isla { id = 5, nombre = "Fuerte de Roca", tipo = Tipo.Libre, peligro = 2, fragmentos = 4, com = 1, agi = 1, nivel = 6, origen = 3,
+        new Isla { id = 5, nombre = "Fuerte de Roca", tipo = Tipo.Libre, peligro = 2, fragmentos = 4, com = 1, agi = 1, nivel = 6, origen = 3, tripulante = Tripulacion.Miembro.Pico,
                    posicion = new Vector2(0.72f, 0.26f), disponible = false,
-                   descripcion = "Un fuerte de piedra tomado por rufianes. Solo los fuertes pasan.", recompensa = "Tripulante: Bruno" },
-        new Isla { id = 6, nombre = "Fortaleza de Voss", tipo = Tipo.Corona, peligro = 4, fragmentos = 5, sig = 1, com = 1, nivel = 8, origen = 4,
+                   descripcion = "Un fuerte de piedra tomado por rufianes. Solo los fuertes pasan.", recompensa = "Tripulante: Bruno · fragmento" },
+        new Isla { id = 6, nombre = "Fortaleza de Voss", tipo = Tipo.Corona, peligro = 4, fragmentos = 5, sig = 1, com = 1, nivel = 8, origen = 4, tripulante = Tripulacion.Miembro.Sombra,
                    posicion = new Vector2(0.88f, 0.55f), disponible = false,
                    descripcion = "La fortaleza de la Almirante Renata Voss. El Corazón de las Mareas espera.", recompensa = "El Corazón de las Mareas" },
     };

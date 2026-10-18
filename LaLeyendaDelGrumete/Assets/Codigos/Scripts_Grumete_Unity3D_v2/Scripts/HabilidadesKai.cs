@@ -47,6 +47,7 @@ public class HabilidadesKai : MonoBehaviour
 
     public void Usar(int casilla)
     {
+        if (ZonaCorona.ProhibeCombate(transform.position)) return;
         var hs = Equipo.ArmaActual.habilidades;
         if (hs == null || hs.Length == 0) { GameState.Avisar("Con los puños no hay habilidades. ¡Consigue un arma!", 1.2f); return; }
         if (casilla >= hs.Length) return;

@@ -84,7 +84,12 @@ public static class GameState
             Efectos.Anillo(posicion, 1.1f, new Color(1f, 0.45f, 0.3f), 0.25f);
         }
         VidaKai -= dano;
-        if (dano > 0) Sonidos.Tocar("kai_dolor", null, 0.9f, 0.08f, 0.35f);   // quejido de Kai
+        if (dano > 0)
+        {
+            Sonidos.Tocar("kai_dolor", null, 0.9f, 0.08f, 0.35f);   // quejido de Kai
+            Efectos.Chispas(posicion + Vector3.up * 1.1f, Vector3.up, new Color(0.85f, 0.1f, 0.08f), 7, 3.5f, 0.35f, 1f);
+            HUD.Herida(Mathf.Clamp(dano / 25f, 0.35f, 1f));   // bordes rojos, mas fuertes si el golpe es grande
+        }
         HUD.Numero(posicion + Vector3.up * 1.4f, "-" + dano, new Color(1f, 0.35f, 0.3f), 1f);
     }
 

@@ -34,6 +34,7 @@ public class AnimacionSimple : MonoBehaviour
     AnimationMixerPlayable mezcla;
     readonly AnimationClipPlayable[] clips = new AnimationClipPlayable[N];
     readonly float[] pesos = new float[N];
+    float velSuave; int objetivoAnterior;
 
     CharacterController cc;
     Vector3 ultimaPos;
@@ -118,7 +119,10 @@ public class AnimacionSimple : MonoBehaviour
     {
         Vector3 d = transform.position - ultimaPos; d.y = 0f;
         ultimaPos = transform.position;
-        float vel = Quieto ? 0f : d.magnitude / Mathf.Max(Time.deltaTime, 0.0001f);
+        float velMedida = Quieto ? 0f : d.magnitude / Mathf.Max(Time.deltaTime, 0.0001f);
+        // la velocidad medida cada cuadro salta mucho: se suaviza para que no cambie de pose de golpe
+        velSuave = Quieto ? 0f : Mathf.Lerp(velSuave, velMedida, 1f - Mathf.Exp(-10f * Time.deltaTime));
+        float vel = velSuave;
 
         bool suelo = Quieto || (cc ? cc.isGrounded : true);
         tiempoAire = suelo ? 0f : tiempoAire + Time.deltaTime;
@@ -164,11 +168,13 @@ public class AnimacionSimple : MonoBehaviour
             accion = -1;
             if (Agachado && agacharse && !enAire) objetivo = K;
             else if (enAire && saltar) objetivo = S;
-            else if (vel > velocidadParaCorrer && correr) objetivo = R;
-            else if (vel > velocidadParaCaminar && caminar) objetivo = C;
+            // con un margen (histeresis): no salta entre caminar y correr por pequenas diferencias
+            else if (correr && (vel > velocidadParaCorrer || (objetivoAnterior == R && vel > velocidadParaCorrer * 0.85f))) objetivo = R;
+            else if (caminar && (vel > velocidadParaCaminar || (objetivoAnterior == C && vel > velocidadParaCaminar * 0.6f))) objetivo = C;
             else objetivo = Q;
         }
 
+        objetivoAnterior = objetivo;
         float paso = suavizado * Time.deltaTime;
         for (int i = 0; i < N; i++)
             pesos[i] = Mathf.MoveTowards(pesos[i], i == objetivo ? 1f : 0f, paso);

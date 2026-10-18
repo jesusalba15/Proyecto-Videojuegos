@@ -11,6 +11,8 @@ public class Rival : MonoBehaviour
     public PlayerController jugador;
     public Transform centroZona;
     public float radioZona = 7f;
+    [Tooltip("Una vez que te ve, te sigue hasta esta distancia del centro de su zona. 0 = automatico (jefe: 3 veces Radio Zona, normal: 1.5 veces)")]
+    public float radioPersecucion = 0f;
     public float velocidad = 2f;
     public float distanciaGolpe = 1.8f;
     public float esperaEntreAtaques = 1.2f;
@@ -65,7 +67,7 @@ public class Rival : MonoBehaviour
     public float gravedad = -20f;
 
     int vida;
-    bool atacando, golpeAplicado, muerto, jugadorEstabaMuerto;
+    bool atacando, golpeAplicado, muerto, jugadorEstabaMuerto, enCombate;
     float t, proximoAtaque, aturdidoHasta;
     float pies, vy, radioPropio, radioKai;   // distancia del pivote a la planta de los pies, y velocidad de caida
     bool desplazando;
@@ -126,7 +128,13 @@ public class Rival : MonoBehaviour
 
         Vector3 centro = centroZona ? centroZona.position : inicio;
         Vector3 aCentro = jugador.transform.position - centro; aCentro.y = 0f;
-        bool enZona = aCentro.magnitude < radioZona;
+        // entra en combate al pisar su zona y no te suelta hasta que te alejes mucho (radio de persecucion)
+        float radioSeguir = radioPersecucion > 0f ? radioPersecucion : radioZona * (esJefe ? 3f : 1.5f);
+        if (!enCombate && aCentro.magnitude < radioZona) enCombate = true;
+        bool loAtacaron = Time.time - UltimoDano < 6f;   // si le pegan (aunque sea de lejos) se voltea y pelea
+        if (loAtacaron) enCombate = true;
+        if (enCombate && aCentro.magnitude > radioSeguir && !loAtacaron) enCombate = false;
+        bool enZona = enCombate;
 
         if (dist > 0.01f && !mirarSiempre) transform.rotation = Quaternion.LookRotation(d);
 
@@ -142,7 +150,14 @@ public class Rival : MonoBehaviour
                 {
                     bool bloqueo = jugador.bloqueando && GameState.Aguante >= costoBloqueo;
                     if (jugador.bloqueando && !bloqueo) GameState.Avisar("¡Guardia rota! Te quedaste sin estamina.", 1.2f);
-                    if (bloqueo) { jugador.Gastar(costoBloqueo); Sonidos.Tocar("bloqueo", jugador.transform.position); }
+                    if (bloqueo)
+                    {
+                        jugador.Gastar(costoBloqueo);
+                        Sonidos.Tocar("bloqueo", jugador.transform.position);
+                        Vector3 frente = jugador.transform.position + Vector3.up * 1.1f + jugador.transform.forward * 0.5f;
+                        Efectos.Chispas(frente, jugador.transform.forward + Vector3.up * 0.5f, new Color(1f, 0.9f, 0.55f), 14, 7f);
+                        Efectos.Destello(frente, new Color(1f, 0.85f, 0.5f), 3f, 4f, 0.1f);
+                    }
                     GameState.DaniarKai(bloqueo ? danoBloqueado : danoGolpe, jugador.transform.position);
                 }
             }
@@ -157,7 +172,19 @@ public class Rival : MonoBehaviour
         }
 
         EnCombate = enZona ? this : (EnCombate == this ? null : EnCombate);
-        if (!enZona) { estado = "Esperando: Kai esta fuera de su zona (" + aCentro.magnitude.ToString("0") + " m del centro, radio " + radioZona + ")"; return; }
+        if (!enZona)
+        {
+            // Kai se escapo: vuelve caminando a su sitio
+            Vector3 vuelta = inicio - transform.position; vuelta.y = 0f;
+            if (vuelta.magnitude > 0.4f && velocidad > 0f)
+            {
+                transform.position += vuelta.normalized * Mathf.Min(velocidad * Time.deltaTime, vuelta.magnitude);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(vuelta), velocidadGiro * Time.deltaTime);
+                estado = "Volviendo a su zona";
+            }
+            else estado = "Esperando: Kai esta fuera de su zona (" + aCentro.magnitude.ToString("0") + " m del centro, radio " + radioZona + ")";
+            return;
+        }
         estado = dist > distanciaGolpe ? (velocidad > 0f ? "Persiguiendo a Kai (" + dist.ToString("0.0") + " m)" : "VELOCIDAD EN 0: no puede caminar")
                                       : "Cerca de Kai: va a atacar";
 
@@ -179,6 +206,7 @@ public class Rival : MonoBehaviour
     void Reiniciar()
     {
         vida = vidaMaxima;
+        enCombate = false;
         atacando = false;
         transform.SetPositionAndRotation(inicio, rotInicio);
         proximoAtaque = Time.time + 1f;
@@ -194,6 +222,7 @@ public class Rival : MonoBehaviour
         bool filo = Equipo.arma == (int)Equipo.IdArma.Sable || Equipo.arma == (int)Equipo.IdArma.Hacha;
         Sonidos.Tocar(filo ? "espada_golpe" : "punio_golpe", transform.position, critico ? 1f : 0.85f);
         Sonidos.Tocar("enemigo_dolor", transform.position, esJefe ? 0.9f : 0.6f, 0.1f, 0.4f);
+        EfectoGolpe(filo, critico);
         HUD.Numero(transform.position + Vector3.up * 1.3f, critico ? dano + "!" : dano.ToString(),
                    critico ? new Color(1f, 0.55f, 0.15f) : new Color(1f, 0.92f, 0.35f), critico ? 1.5f : 1.1f);
 
@@ -205,6 +234,33 @@ public class Rival : MonoBehaviour
 
         if (anim) anim.Golpeado();
         StartCoroutine(Parpadeo());
+    }
+
+    // centro del cuerpo (segun el modelo) para poner ahi las chispas
+    Vector3 Centro()
+    {
+        if (rends != null)
+            foreach (var r in rends) if (r && r.enabled) return r.bounds.center;
+        return transform.position + Vector3.up * 1f;
+    }
+
+    // chispas del lado por donde llego el golpe, congelado corto y, si es critico, fogonazo
+    void EfectoGolpe(bool filo, bool critico)
+    {
+        Vector3 haciaKai = jugador ? jugador.transform.position - transform.position : transform.forward;
+        haciaKai.y = 0f;
+        if (haciaKai.sqrMagnitude < 0.01f) haciaKai = transform.forward;
+        haciaKai.Normalize();
+        Vector3 punto = Centro() + haciaKai * Radio * 0.8f;
+        Color color = filo ? new Color(1f, 0.82f, 0.4f) : new Color(1f, 0.95f, 0.85f);
+        Efectos.Chispas(punto, haciaKai + Vector3.up * 0.4f, color, critico ? 20 : filo ? 11 : 6, critico ? 8f : 6f);
+        if (!filo) Efectos.Polvo(punto, new Color(0.9f, 0.85f, 0.75f, 0.45f), 3, 0.5f);
+        if (critico)
+        {
+            Efectos.Destello(punto, new Color(1f, 0.6f, 0.2f), 5f, 5f, 0.15f);
+            Efectos.Sacudir(esJefe ? 0.16f : 0.1f, 0.12f);
+        }
+        Efectos.Impacto(critico ? 0.08f : esJefe ? 0.045f : 0.035f);
     }
 
     IEnumerator Morir()
@@ -224,7 +280,21 @@ public class Rival : MonoBehaviour
                     pocion, 1, Random.value < probBomba ? 1 : 0);
 
         float duracion = anim ? anim.Morir() : 0f;
-        yield return new WaitForSeconds(duracion + esperaAlDesaparecer);
+        // cae al suelo: golpe sordo y polvo (a mitad de la animacion de morir)
+        yield return new WaitForSeconds(duracion * 0.55f);
+        Vector3 suelo = transform.position + Vector3.down * pies;
+        Sonidos.Tocar("enemigo_cae", suelo, esJefe ? 1f : 0.8f);
+        Efectos.Polvo(suelo, new Color(0.78f, 0.7f, 0.58f, 0.55f), esJefe ? 14 : 8, esJefe ? 1.6f : 1f);
+        yield return new WaitForSeconds(duracion * 0.45f + esperaAlDesaparecer);
+        // se desvanece hundiendose un poco en vez de desaparecer de golpe
+        Efectos.Polvo(suelo, new Color(0.7f, 0.66f, 0.6f, 0.4f), 6, 0.8f);
+        Vector3 desde = transform.position;
+        usarGravedad = false;
+        for (float t = 0f; t < 0.5f; t += Time.deltaTime)
+        {
+            transform.position = desde + Vector3.down * (t / 0.5f) * 0.6f;
+            yield return null;
+        }
         gameObject.SetActive(false);
     }
 
@@ -233,7 +303,7 @@ public class Rival : MonoBehaviour
     // ================================================================ mirar a Kai
     void MirarAKai()
     {
-        if (!mirarSiempre || giroBloqueado || desplazando || !jugador || jugador.EstaMuerto) return;
+        if (!mirarSiempre || giroBloqueado || desplazando || !jugador || jugador.EstaMuerto || !enCombate) return;   // volviendo a su sitio mira hacia donde camina
         Vector3 d = jugador.transform.position - transform.position; d.y = 0f;
         if (d.sqrMagnitude < 0.01f || d.magnitude > radioZona * 2f + 6f) return;   // lejos: no lo sigue con la mirada
         Quaternion objetivo = Quaternion.LookRotation(d);

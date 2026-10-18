@@ -93,6 +93,8 @@ public class Botin : MonoBehaviour
         if (chatarra > 0) HUD.Numero(p + Vector3.up * 0.3f, "+" + chatarra + " chatarra", new Color(0.75f, 0.78f, 0.8f), 0.8f);
         if (pocion >= 0 && cantidadPocion > 0) HUD.Numero(p + Vector3.up * 0.5f, "+" + cantidadPocion + " " + Equipo.Pociones[pocion].nombre, new Color(0.45f, 1f, 0.5f), 0.8f);
         GameState.Avisar("Botín: " + Contenido(), 2f);
+        Sonidos.Tocar(doblones > 0 ? "monedas" : "recoger", transform.position, 0.8f);
+        Efectos.Columna(transform.position, new Color(1f, 0.82f, 0.3f), 12, 0.7f);
         Destroy(gameObject);
     }
 }

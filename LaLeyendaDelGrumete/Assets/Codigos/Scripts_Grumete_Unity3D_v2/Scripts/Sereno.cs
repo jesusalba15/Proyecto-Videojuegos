@@ -171,7 +171,7 @@ public class Sereno : MonoBehaviour
         estado = e; tiempoEstado = 0f;
         atascado = false; posAtasco = transform.position; revisarAtasco = Time.time + 1f; ultimoAngulo = 0f;
         if (e == Estado.Busqueda) miradaBase = transform.eulerAngles.y;
-        if (e == Estado.Patrulla) espera = pausa;
+        if (e == Estado.Patrulla) espera = 0.3f;
     }
 
     void Sospechar()
@@ -193,12 +193,19 @@ public class Sereno : MonoBehaviour
             { s.ultimaPos = ultimaPos; s.det = Mathf.Max(s.det, 50f); s.Cambiar(Estado.Sospecha); }
     }
 
-    void Atrapar()
+    void Atrapar() { AtraparA(jugador, reaparicion, "¡Te atraparon los guardias! Inténtalo de nuevo."); }
+
+    // Kai atrapado (por un guardia o por el farol de la torre): vuelve al punto de reaparicion
+    // y todas las patrullas empiezan de nuevo (falla blanda, como dice el GDD)
+    public static void AtraparA(PlayerController kai, Transform reaparicion, string mensaje)
     {
-        GameState.Avisar("¡Te atraparon los guardias! Inténtalo de nuevo.", 2.5f);
-        jugador.Reaparecer(reaparicion);
+        if (!kai) return;
+        GameState.Avisar(mensaje, 2.5f);
+        if (reaparicion) kai.Reaparecer(reaparicion);
         graciaHasta = Time.time + 2f;
+        EntradaSigilo.Reiniciar();   // tiene que volver a entrar por la puerta
         foreach (var s in Todos.ToArray()) if (s) s.VolverAlInicio();
+        FarolGiratorio.ReiniciarTodos();
     }
 
     void VolverAlInicio()
@@ -222,7 +229,7 @@ public class Sereno : MonoBehaviour
         Vector3 blanco = jugador.transform.position + Vector3.up * (jugador.agachado ? -0.5f : 0.3f);
         Vector3 d = blanco - ojos;
         // persiguiendo ve mas lejos y en un angulo mas amplio
-        float rango = estado == Estado.Persecucion ? alcance * 1.6f : alcance;
+        float rango = (estado == Estado.Persecucion ? alcance * 1.6f : alcance) * CicloDia.FactorVision;   // de noche ve menos
         float angulo = estado == Estado.Persecucion ? 160f : anguloVision;
         if (d.magnitude > rango || Vector3.Angle(transform.forward, Plano(d)) > angulo * 0.5f) return false;
         if (Physics.Linecast(ojos, blanco, out RaycastHit hit, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
@@ -241,26 +248,35 @@ public class Sereno : MonoBehaviour
     // ================================================================ movimiento
     void Patrullar()
     {
-        if (espera > 0f) { espera -= Time.deltaTime; return; }
+        if (espera > 0f)
+        {
+            // pausa corta mirando un poco a los lados (no se queda como estatua)
+            espera -= Time.deltaTime;
+            transform.Rotate(0f, Mathf.Sin(Time.time * 2f) * 45f * Time.deltaTime, 0f);
+            return;
+        }
         Vector3 destino;
         if (puntos != null && puntos.Length > 0)
         {
             if (!puntos[indice]) { indice = (indice + 1) % puntos.Length; return; }
             destino = puntos[indice].position;
             // al llegar, o si se atasca, sigue con el siguiente punto
-            if (Mover(destino, velocidad) || atascado) { indice = (indice + 1) % puntos.Length; espera = pausa; atascado = false; }
+            if (Mover(destino, velocidad) || atascado) { indice = (indice + 1) % puntos.Length; espera = atascado ? 0f : Pausa(); atascado = false; }
             return;
         }
         // sin puntos: va a lugares al azar que pueda ver sin paredes en medio
         if (!hayAzar) { destinoAzar = PuntoAzar(); hayAzar = true; tiempoEstado = 0f; }
-        if (Mover(destinoAzar, velocidad) || atascado || tiempoEstado > 10f) { hayAzar = false; espera = pausa * 2f; atascado = false; }
+        if (Mover(destinoAzar, velocidad) || atascado || tiempoEstado > 10f) { hayAzar = false; espera = atascado ? 0f : Pausa(); atascado = false; }
     }
+
+    // pausa al llegar a un punto: corta y un poco distinta cada vez (maximo 1.5 s)
+    float Pausa() => Mathf.Min(Random.Range(pausa * 0.5f, pausa), 1.5f);
 
     // elige un lugar al azar dentro del radio al que se llega en linea recta (sin paredes ni cajas en medio)
     Vector3 PuntoAzar()
     {
         Vector3 aqui = transform.position;
-        for (int i = 0; i < 25; i++)
+        for (int i = 0; i < 40; i++)
         {
             Vector3 c = inicio + new Vector3(Random.Range(-1f, 1f), 0f, Random.Range(-1f, 1f)) * radioPatrulla;
             c.y = aqui.y;
@@ -270,8 +286,13 @@ public class Sereno : MonoBehaviour
             if (!Suelo(c, 1.2f, out _)) continue;
             return c;
         }
-        // nada libre: da media vuelta unos pasos
-        return aqui - transform.forward * 3f;
+        // nada libre lejos: prueba pasos cortos alrededor (8 direcciones)
+        for (int k = 0; k < 8; k++)
+        {
+            Vector3 c = aqui + Quaternion.Euler(0f, k * 45f + Random.Range(0f, 30f), 0f) * Vector3.forward * Random.Range(2.5f, 5f);
+            if (Camino(aqui, c)) return c;
+        }
+        return inicio;   // vuelve a donde empezo
     }
 
     // true si se puede caminar en linea recta de a hasta b

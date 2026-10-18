@@ -102,6 +102,8 @@ public class ArmaEnSuelo : MonoBehaviour
         if (kai && !HUD.Pausado && Cerca(kai.position) && Input.GetKeyDown(KeyCode.F))
         {
             Equipo.Desbloquear(arma);
+            Sonidos.Tocar("recoger", transform.position, 0.9f, 0f);
+            Efectos.Columna(transform.position, new Color(1f, 0.85f, 0.3f), 16, 1f);
             gameObject.SetActive(false);
         }
     }
