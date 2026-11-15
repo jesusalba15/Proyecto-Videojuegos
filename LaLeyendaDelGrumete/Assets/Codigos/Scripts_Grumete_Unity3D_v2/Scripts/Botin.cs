@@ -17,12 +17,25 @@ public class Botin : MonoBehaviour
     public static Botin Crear(Vector3 pos, int doblones, int madera, int chatarra, int pocion, int cantidadPocion, int bombas = 0)
     {
         var go = new GameObject("Botin");
-        go.transform.position = pos + Vector3.up * 0.05f;
+        go.transform.position = AlSuelo(pos) + Vector3.up * 0.05f;
         var b = go.AddComponent<Botin>();
         b.bombas = bombas; b.doblones = doblones; b.madera = madera; b.chatarra = chatarra; b.pocion = pocion; b.cantidadPocion = cantidadPocion;
         b.Modelo();
         MarcadorMinimapa.Agregar(go, MarcadorMinimapa.Tipo.Cofre, false, "$", "Botín");
         return b;
+    }
+
+    // baja el punto hasta el suelo (ignora enemigos, a Kai y triggers como el Mar)
+    static Vector3 AlSuelo(Vector3 p)
+    {
+        var hits = Physics.RaycastAll(p + Vector3.up * 1.5f, Vector3.down, 15f, ~0, QueryTriggerInteraction.Ignore);
+        float mejor = float.MaxValue; Vector3 punto = p;
+        foreach (var h in hits)
+        {
+            if (h.collider.GetComponentInParent<Rival>() || h.collider.GetComponentInParent<PlayerController>()) continue;
+            if (h.distance < mejor) { mejor = h.distance; punto = h.point; }
+        }
+        return punto;
     }
 
     // saco de cuero con una moneda encima y una lucecita dorada (piezas basicas, sin assets)
