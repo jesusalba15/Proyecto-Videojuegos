@@ -1,0 +1,156 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Jesus\\Downloads\\Proyecto-Videojuegos-main\\Proyecto-Videojuegos\\LaLeyendaDelGrumete\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{8DA741CE-F6A4-4811-C0DE-F68F56660315}|Assembly-CSharp.csproj|C:\\Users\\Jesus\\Downloads\\Proyecto-Videojuegos-main\\Proyecto-Videojuegos\\LaLeyendaDelGrumete\\assets\\codigos\\scripts_grumete_unity3d_v2\\scripts\\muelle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8DA741CE-F6A4-4811-C0DE-F68F56660315}|Assembly-CSharp.csproj|solutionrelative:assets\\codigos\\scripts_grumete_unity3d_v2\\scripts\\muelle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8DA741CE-F6A4-4811-C0DE-F68F56660315}|Assembly-CSharp.csproj|C:\\Users\\Jesus\\Downloads\\Proyecto-Videojuegos-main\\Proyecto-Videojuegos\\LaLeyendaDelGrumete\\assets\\codigos\\scripts_grumete_unity3d_v2\\scripts\\archipielago.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8DA741CE-F6A4-4811-C0DE-F68F56660315}|Assembly-CSharp.csproj|solutionrelative:assets\\codigos\\scripts_grumete_unity3d_v2\\scripts\\archipielago.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8DA741CE-F6A4-4811-C0DE-F68F56660315}|Assembly-CSharp.csproj|C:\\Users\\Jesus\\Downloads\\Proyecto-Videojuegos-main\\Proyecto-Videojuegos\\LaLeyendaDelGrumete\\assets\\codigos\\scripts_grumete_unity3d_v2\\scripts\\zonaniebla.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8DA741CE-F6A4-4811-C0DE-F68F56660315}|Assembly-CSharp.csproj|solutionrelative:assets\\codigos\\scripts_grumete_unity3d_v2\\scripts\\zonaniebla.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8DA741CE-F6A4-4811-C0DE-F68F56660315}|Assembly-CSharp.csproj|c:\\users\\jesus\\downloads\\proyecto-videojuegos-main\\proyecto-videojuegos\\laleyendadelgrumete\\assets\\codigos\\scripts_grumete_unity3d_v2\\scripts\\piezasbarco.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8DA741CE-F6A4-4811-C0DE-F68F56660315}|Assembly-CSharp.csproj|solutionrelative:assets\\codigos\\scripts_grumete_unity3d_v2\\scripts\\piezasbarco.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8DA741CE-F6A4-4811-C0DE-F68F56660315}|Assembly-CSharp.csproj|C:\\Users\\Jesus\\Downloads\\Proyecto-Videojuegos-main\\Proyecto-Videojuegos\\LaLeyendaDelGrumete\\assets\\codigos\\scripts_grumete_unity3d_v2\\scripts\\sueltapieza.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8DA741CE-F6A4-4811-C0DE-F68F56660315}|Assembly-CSharp.csproj|solutionrelative:assets\\codigos\\scripts_grumete_unity3d_v2\\scripts\\sueltapieza.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8DA741CE-F6A4-4811-C0DE-F68F56660315}|Assembly-CSharp.csproj|C:\\Users\\Jesus\\Downloads\\Proyecto-Videojuegos-main\\Proyecto-Videojuegos\\LaLeyendaDelGrumete\\assets\\codigos\\scripts_grumete_unity3d_v2\\scripts\\piezasuelo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8DA741CE-F6A4-4811-C0DE-F68F56660315}|Assembly-CSharp.csproj|solutionrelative:assets\\codigos\\scripts_grumete_unity3d_v2\\scripts\\piezasuelo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8DA741CE-F6A4-4811-C0DE-F68F56660315}|Assembly-CSharp.csproj|C:\\Users\\Jesus\\Downloads\\Proyecto-Videojuegos-main\\Proyecto-Videojuegos\\LaLeyendaDelGrumete\\assets\\codigos\\scripts_grumete_unity3d_v2\\scripts\\misionpiezasbarco.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8DA741CE-F6A4-4811-C0DE-F68F56660315}|Assembly-CSharp.csproj|solutionrelative:assets\\codigos\\scripts_grumete_unity3d_v2\\scripts\\misionpiezasbarco.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8DA741CE-F6A4-4811-C0DE-F68F56660315}|Assembly-CSharp.csproj|c:\\users\\jesus\\downloads\\proyecto-videojuegos-main\\proyecto-videojuegos\\laleyendadelgrumete\\assets\\codigos\\scripts_grumete_unity3d_v2\\scripts\\botin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8DA741CE-F6A4-4811-C0DE-F68F56660315}|Assembly-CSharp.csproj|solutionrelative:assets\\codigos\\scripts_grumete_unity3d_v2\\scripts\\botin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 7,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Botin.cs",
+              "DocumentMoniker": "C:\\Users\\Jesus\\Downloads\\Proyecto-Videojuegos-main\\Proyecto-Videojuegos\\LaLeyendaDelGrumete\\Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\Botin.cs",
+              "RelativeDocumentMoniker": "Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\Botin.cs",
+              "ToolTip": "C:\\Users\\Jesus\\Downloads\\Proyecto-Videojuegos-main\\Proyecto-Videojuegos\\LaLeyendaDelGrumete\\Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\Botin.cs",
+              "RelativeToolTip": "Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\Botin.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAABZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-11-15T18:27:39.09Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Misionpiezasbarco.cs",
+              "DocumentMoniker": "C:\\Users\\Jesus\\Downloads\\Proyecto-Videojuegos-main\\Proyecto-Videojuegos\\LaLeyendaDelGrumete\\Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\Misionpiezasbarco.cs",
+              "RelativeDocumentMoniker": "Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\Misionpiezasbarco.cs",
+              "ToolTip": "C:\\Users\\Jesus\\Downloads\\Proyecto-Videojuegos-main\\Proyecto-Videojuegos\\LaLeyendaDelGrumete\\Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\Misionpiezasbarco.cs",
+              "RelativeToolTip": "Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\Misionpiezasbarco.cs",
+              "ViewState": "AgIAACQAAAAAAAAAAAAqwKQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-11-15T16:14:32.475Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Piezasuelo.cs",
+              "DocumentMoniker": "C:\\Users\\Jesus\\Downloads\\Proyecto-Videojuegos-main\\Proyecto-Videojuegos\\LaLeyendaDelGrumete\\Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\Piezasuelo.cs",
+              "RelativeDocumentMoniker": "Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\Piezasuelo.cs",
+              "ToolTip": "C:\\Users\\Jesus\\Downloads\\Proyecto-Videojuegos-main\\Proyecto-Videojuegos\\LaLeyendaDelGrumete\\Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\Piezasuelo.cs",
+              "RelativeToolTip": "Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\Piezasuelo.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAzwKAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-11-15T16:12:25.599Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Sueltapieza.cs",
+              "DocumentMoniker": "C:\\Users\\Jesus\\Downloads\\Proyecto-Videojuegos-main\\Proyecto-Videojuegos\\LaLeyendaDelGrumete\\Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\Sueltapieza.cs",
+              "RelativeDocumentMoniker": "Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\Sueltapieza.cs",
+              "ToolTip": "C:\\Users\\Jesus\\Downloads\\Proyecto-Videojuegos-main\\Proyecto-Videojuegos\\LaLeyendaDelGrumete\\Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\Sueltapieza.cs",
+              "RelativeToolTip": "Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\Sueltapieza.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-11-15T16:11:19.359Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PiezasBarco.cs",
+              "DocumentMoniker": "C:\\Users\\Jesus\\Downloads\\Proyecto-Videojuegos-main\\Proyecto-Videojuegos\\LaLeyendaDelGrumete\\Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\PiezasBarco.cs",
+              "RelativeDocumentMoniker": "Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\PiezasBarco.cs",
+              "ToolTip": "C:\\Users\\Jesus\\Downloads\\Proyecto-Videojuegos-main\\Proyecto-Videojuegos\\LaLeyendaDelGrumete\\Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\PiezasBarco.cs",
+              "RelativeToolTip": "Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\PiezasBarco.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABAAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-11-15T15:56:33.022Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "zonaNiebla.cs",
+              "DocumentMoniker": "C:\\Users\\Jesus\\Downloads\\Proyecto-Videojuegos-main\\Proyecto-Videojuegos\\LaLeyendaDelGrumete\\Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\zonaNiebla.cs",
+              "RelativeDocumentMoniker": "Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\zonaNiebla.cs",
+              "ToolTip": "C:\\Users\\Jesus\\Downloads\\Proyecto-Videojuegos-main\\Proyecto-Videojuegos\\LaLeyendaDelGrumete\\Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\zonaNiebla.cs",
+              "RelativeToolTip": "Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\zonaNiebla.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-11-14T15:57:00.128Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Archipielago.cs",
+              "DocumentMoniker": "C:\\Users\\Jesus\\Downloads\\Proyecto-Videojuegos-main\\Proyecto-Videojuegos\\LaLeyendaDelGrumete\\Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\Archipielago.cs",
+              "RelativeDocumentMoniker": "Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\Archipielago.cs",
+              "ToolTip": "C:\\Users\\Jesus\\Downloads\\Proyecto-Videojuegos-main\\Proyecto-Videojuegos\\LaLeyendaDelGrumete\\Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\Archipielago.cs",
+              "RelativeToolTip": "Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\Archipielago.cs",
+              "ViewState": "AgIAAC4AAAAAAAAAAAAwwBkAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-11-14T15:12:41.006Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Muelle.cs",
+              "DocumentMoniker": "C:\\Users\\Jesus\\Downloads\\Proyecto-Videojuegos-main\\Proyecto-Videojuegos\\LaLeyendaDelGrumete\\Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\Muelle.cs",
+              "RelativeDocumentMoniker": "Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\Muelle.cs",
+              "ToolTip": "C:\\Users\\Jesus\\Downloads\\Proyecto-Videojuegos-main\\Proyecto-Videojuegos\\LaLeyendaDelGrumete\\Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\Muelle.cs",
+              "RelativeToolTip": "Assets\\Codigos\\Scripts_Grumete_Unity3D_v2\\Scripts\\Muelle.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAGoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-11-14T15:06:20.372Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
