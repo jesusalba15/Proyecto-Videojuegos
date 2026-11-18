@@ -5625,8 +5625,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Cofre
   jugador: {fileID: 731641295}
   radio: 2
-  aparecerAlAbrir: {fileID: 423719131}
-  mensaje: "\xA1Mara \"Nudos\" se une a la tripulaci\xF3n! Tu barco ser\xE1 m\xE1s r\xE1pido."
+  aparecerAlAbrir: {fileID: 234326454}
+  mensaje: "Hmm... una extra\xF1a bolsa, que contendr\xE1?"
   animador: {fileID: 0}
   clipAbrir: {fileID: 0}
   tapa: {fileID: 0}
@@ -8855,6 +8855,127 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: cb063e835546c0349906488c5789719b, type: 3}
   m_PrefabInstance: {fileID: 1421703485}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &234326453
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 1ca8f86428552e34385118e69840da1f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 998.3391
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1ca8f86428552e34385118e69840da1f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 25.011292
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1ca8f86428552e34385118e69840da1f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -534.6094
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1ca8f86428552e34385118e69840da1f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1ca8f86428552e34385118e69840da1f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1ca8f86428552e34385118e69840da1f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1ca8f86428552e34385118e69840da1f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1ca8f86428552e34385118e69840da1f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1ca8f86428552e34385118e69840da1f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1ca8f86428552e34385118e69840da1f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1ca8f86428552e34385118e69840da1f, type: 3}
+      propertyPath: m_Name
+      value: premioisla4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3451118302482216456, guid: 1ca8f86428552e34385118e69840da1f, type: 3}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3451118302482216456, guid: 1ca8f86428552e34385118e69840da1f, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1ca8f86428552e34385118e69840da1f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 234326456}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1ca8f86428552e34385118e69840da1f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 234326455}
+  m_SourcePrefab: {fileID: 100100000, guid: 1ca8f86428552e34385118e69840da1f, type: 3}
+--- !u!1 &234326454 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 1ca8f86428552e34385118e69840da1f, type: 3}
+  m_PrefabInstance: {fileID: 234326453}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &234326455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 234326454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6dd40c4931bad44c886df143e045f0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Botin
+  doblones: 350
+  madera: 0
+  chatarra: 0
+  bombas: 2
+  pocion: 0
+  cantidadPocion: 0
+--- !u!114 &234326456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 234326454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03bc2c082faac2341a9231fd9302afaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RecompensaIsla
+  cuando: 0
+  clave: cofreIsla4
+  radio: 2.5
+  fragmentos: 1
+  tripulante: -1
+  arma: 3
+  experiencia: 200
+  doblones: 0
+  mejoraVela: 0
+  hablante: 
+  mensaje: Has encontrado una  nueva arma! usa las pistolas para acabar con tus enemigos a distancia.
+  abrirMapa: 0
+  activar: []
+  desactivar: []
+  esFinal: 0
 --- !u!1001 &234394194
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35941,8 +36062,15 @@ MonoBehaviour:
   idIsla: 4
   tamano: {x: 200, y: 150}
   objetivo: "encuentra el botin de los carro\xF1eros y escapa sin ser visto"
-  pasos: []
-  recompensaPrincipal: {fileID: 0}
+  pasos:
+  - texto: 
+    recompensa: {fileID: 0}
+    grupoObjetos: 
+    cantidad: 0
+    encargo: {fileID: 0}
+    bloqueo: {fileID: 0}
+    ocultoHastaAnterior: 0
+  recompensaPrincipal: {fileID: 234326456}
 --- !u!1001 &993125179
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -77931,3 +78059,4 @@ SceneRoots:
   - {fileID: 2041688368}
   - {fileID: 766403404}
   - {fileID: 1353498604}
+  - {fileID: 234326453}
